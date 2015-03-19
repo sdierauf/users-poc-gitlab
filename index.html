@@ -27,9 +27,16 @@
 
     <div class="row">
       <div class="col-md-12">
+        <h1>CSE Gitlab Admin account generator</h1>
+        <p class="text-muted">Generates accounts for unfound users</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
         <form class="form-horizontal">
           <h3>Paste your CSE Gitlab private key here:</h3>
-          <input id="private-key" type="" class="form-control" placeholder="Gitlab private key:">
+          <input id="private-key" type="" class="form-control" placeholder="Gitlab private key:" value="JzcaqkmdGKjWDHsiZd8R">
         </form>
       </div>
     </div>
@@ -41,15 +48,34 @@
       </div>
       <div class="col-md-4">
         <h4>Paste netids here:</h4>
-        <textarea class="form-control" rows="20"></textarea>
+        <textarea id="requested-net-ids" class="form-control" rows="10"></textarea>
         <br>
         <p><a id="lookup-user" class="btn btn-lg btn-success" role="button">Lookup</a></p>
       </div>
-      <div class="col-md-4">
-        <h4>Account found</h4>
+      <div class="col-md-5">
+        <h4>Found</h4>
+        <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>NetID</th>
+          </tr>
+        </thead>
+        <tbody id="found-netids">
+        </tbody>
+        </table>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <h4>Not found</h4> 
+        <table class="table">
+        <thead>
+          <tr>
+            <th>id</th>
+          </tr>
+        </thead>
+        <tbody id="not-found-netids"></tbody>
+        </table>
       </div>
     </div>
 
