@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<<!DOCTYPE html>
 <html>
 <head>
   <!-- Latest compiled and minified CSS -->
@@ -8,7 +7,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="jumbotron-narrow.css">
   <!-- Latest compiled and minified JavaScript -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="gitlab-user-admin.js"></script>
   <title>Gitlab API Tools</title>
 </head>
 <body>
@@ -28,7 +29,7 @@
       <div class="col-md-12">
         <form class="form-horizontal">
           <h3>Paste your CSE Gitlab private key here:</h3>
-          <input id="privatekey" type="" class="form-control" placeholder="Gitlab private key:">
+          <input id="private-key" type="" class="form-control" placeholder="Gitlab private key:">
         </form>
       </div>
     </div>
@@ -42,7 +43,7 @@
         <h4>Paste netids here:</h4>
         <textarea class="form-control" rows="20"></textarea>
         <br>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Lookup</a></p>
+        <p><a id="lookup-user" class="btn btn-lg btn-success" role="button">Lookup</a></p>
       </div>
       <div class="col-md-4">
         <h4>Account found</h4>
