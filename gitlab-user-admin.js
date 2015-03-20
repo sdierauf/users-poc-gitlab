@@ -42,8 +42,6 @@ function getNetIDList(separator) {
   }
 }
 
-
-
 function lookupUsers() {
   //get gitlab private key
   var privateKey = document.getElementById('private-key').value;
@@ -54,22 +52,6 @@ function lookupUsers() {
   pruneTable('found-netids');
   pruneTable('not-found-netids');
   var requestNetIDs = getNetIDList();
-  // for (var i = 0; i < requestNetIDs.length; i++) {
-  //   // ajaxify("users?search=" + requestNetIDs[i], 
-  //   //         privateKey, 
-  //   //         (function(id){ return handleSingleUserLookup(id)})(requestNetIDs[i]));
-  //   var query = "users?search=" + requestNetIDs[i];
-  //   var xhr = new XMLHttpRequest();
-  //   var requestNetID = requestNetIDs[i];
-  //   xhr.onload = function() { handleSingleUserLookup(xhr, requestNetID)};
-  //   console.log("requesting: " + GITLAB_ENDPOINT + query);
-  //   xhr.open("GET", GITLAB_ENDPOINT + query, true);
-  //   xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-  //   xhr.setRequestHeader("Content-Type", "text/plain");
-  //   xhr.setRequestHeader("PRIVATE-TOKEN", privateKey);
-  //   // console.log(xhr);
-  //   xhr.send();
-  // }
   requestNetIDs.forEach(function(el) {
     var query = "users?search=" + el;
     var xhr = new XMLHttpRequest();
@@ -81,8 +63,6 @@ function lookupUsers() {
     xhr.send();
   });
 }
-
-
 
 function handleSingleUserLookup(xhr, user) {
   console.log(user);
@@ -113,53 +93,6 @@ function appendToNotFoundTable(userString) {
           .appendChild(renderStringTableElement(userString));
 }
 
-function handleUsers() {
-  
-  if (this.status != 200) {
-    alert('failed to get user data!');
-    return;
-  }
-  
-  var userData = JSON.parse(this.responseText);
-  console.log(userData);
-  // get arr of netids
-  var reqNetIDs = getNetIDList();
-  var foundNetIDs = [];
-  var notFoundNetIDs = [];
-  // iterate through reqd netids and json list,
-  for (var i = 0; i < reqNetIDs.length; i++) {
-    var found = false;
-    for (var j = 0; j < userData.length; j++) {
-      // if netid found in res, put it nice list
-      if (reqNetIDs[i] == userData[j].username) {
-        foundNetIDs.push(userData[j]);
-        found = true;
-        break;
-      }
-    }
-    // else, naughty list
-    if (!found) {
-      notFoundNetIDs.push(reqNetIDs[i]);
-    }
-  }
-
-  renderTable('found-netids', foundNetIDs);
-  renderTable('not-found-netids', notFoundNetIDs);
-  // pass not found to admin tool
-}
-
-function renderTable(tableId, userData) {
-  var tableBody = document.getElementById(tableId);
-  tableBody.innerHTML = "";
-  for (var i = 0; i < userData.length; i++) {
-    if (typeof userData[i] != "string") {
-      tableBody.appendChild(renderJSONTableElement(userData[i]))
-    } else {
-      tableBody.appendChild(renderStringTableElement(userData[i]));
-    }
-  }
-}
-
 function renderStringTableElement(data) {
   var tr = document.createElement('tr');
   tr.classList.add('failure');
@@ -183,8 +116,6 @@ function renderJSONTableElement(data) {
   tr.appendChild(userNetID);
   return tr;
 }
-
-
 
 function init() {
   document.getElementById('lookup-user').onclick = lookupUsers;
