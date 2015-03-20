@@ -14,7 +14,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="header clearfix">
+    <!-- <div class="header clearfix">
       <nav>
         <ul class="nav nav-pills pull-right">
           <li role="presentation" class="active"><a href="#">Users</a></li>
@@ -23,12 +23,13 @@
         </ul>
       </nav>
       <h3 class="text-muted">CSE Gitlab Tools</h3>
-    </div>
+    </div> -->
 
     <div class="row">
       <div class="col-md-12">
         <h1>CSE Gitlab Admin account generator</h1>
-        <p class="text-muted">Generates accounts for unfound users</p>
+        <p class="text-muted">Generates accounts for unfound users.
+        <span class="text-warning">You can do bad things with this tool. Be careful.</span></p>
       </div>
     </div>
 
@@ -78,6 +79,15 @@
         </table>
       </div>
     </div>
+    <div class="row" id="admin-add-panel" style="display: none">
+      <div class="col-md-12">
+        <h2>Create accounts for the following users:</h2>
+      </div>
+      <div class="col-md-3">
+        <textarea id="users-to-add" class="form-control"></textarea>
+      </div>
+    </div>
+
 
 <!--     <div class="jumbotron">
       <h1>Jumbotron heading</h1>

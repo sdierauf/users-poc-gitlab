@@ -23,8 +23,12 @@ function pruneTable(tableId) {
 }
 
 function getNetIDList(separator) {
+  return splitTextInTextArea(separator, 'requested-net-ids');
+}
+
+function splitTextInTextArea(separator, textareaID) {
   separator = separator || '\n'; // default split on newline
-  var netIDs = document.getElementById('requested-net-ids');
+  var netIDs = document.getElementById(textareaID);
   if (netIDs) {
     netIDs = netIDs.value.split(separator);
     // Sanitize
@@ -76,6 +80,7 @@ function handleSingleUserLookup(xhr, user) {
   // if it's empty, the user was not found
   if (userData.length == 0) {
     appendToNotFoundTable(user);
+    routeToAdminAddPanel(user);
   } else {
     appendToFoundTable(userData);
   }
@@ -95,7 +100,7 @@ function appendToNotFoundTable(userString) {
 
 function renderStringTableElement(data) {
   var tr = document.createElement('tr');
-  tr.classList.add('failure');
+  tr.classList.add('danger');
   var td = document.createElement('td');
   td.innerHTML = data;
   tr.appendChild(td);
@@ -117,8 +122,27 @@ function renderJSONTableElement(data) {
   return tr;
 }
 
+function routeToAdminAddPanel(userString) {
+  initAdminAddPanel();
+  appendUserToAddField(userString);
+}
+
+function initAdminAddPanel() {
+  // make it visible if it's not
+  var adminPanel = document.getElementById('admin-add-panel');
+  if (adminPanel.style.display == "none") {
+    adminPanel.style.display = "";
+  }
+  // bind to the button
+}
+
+function appendUserToAddField(userString) {
+  document.getElementById('users-to-add').value += userString + "\n";
+}
+
 function init() {
   document.getElementById('lookup-user').onclick = lookupUsers;
+  // document.getElementById('admin-add-panel').style.display = "none";
 }
 
 
