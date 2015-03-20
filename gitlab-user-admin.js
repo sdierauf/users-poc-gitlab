@@ -1,17 +1,25 @@
 // Globals
 
-var GITLAB_ENDPOINT = "https://gitlab.cs.washington.edu/api/v3/";
+var GITLAB_ENDPOINT = "https://gitlab-test.cs.washington.edu/api/v3/";
 
 // Helper functions
 
 //meta-ajax request taking in the necessary query string
 //and the callback
-function ajaxify(query, privateKey,  cb) {
-  var ajax = new XMLHttpRequest();
-  ajax.onload = cb;
-  ajax.open("GET", GITLAB_ENDPOINT + query, true);
-  ajax.setRequestHeader("PRIVATE_TOKEN", privateKey);
-  ajax.send();
+function ajaxify(query, privateKey, cb) {
+  var xhr = new XMLHttpRequest();
+  xhr.onload = cb;
+  console.log("requesting: " + GITLAB_ENDPOINT + query);
+  xhr.open("GET", GITLAB_ENDPOINT + query, true);
+  xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+  xhr.setRequestHeader("Content-Type", "text/plain");
+  xhr.setRequestHeader("PRIVATE-TOKEN", privateKey);
+  console.log(xhr);
+  xhr.send();
+}
+
+function pruneTable(tableId) {
+  document.getElementById(tableId).innerHTML = "";
 }
 
 function getNetIDList(separator) {
@@ -43,8 +51,66 @@ function lookupUsers() {
     alert("Need to put in private key!");
     return;
   }
-  // Make request
-  ajaxify('users', privateKey, handleUsers);
+  pruneTable('found-netids');
+  pruneTable('not-found-netids');
+  var requestNetIDs = getNetIDList();
+  // for (var i = 0; i < requestNetIDs.length; i++) {
+  //   // ajaxify("users?search=" + requestNetIDs[i], 
+  //   //         privateKey, 
+  //   //         (function(id){ return handleSingleUserLookup(id)})(requestNetIDs[i]));
+  //   var query = "users?search=" + requestNetIDs[i];
+  //   var xhr = new XMLHttpRequest();
+  //   var requestNetID = requestNetIDs[i];
+  //   xhr.onload = function() { handleSingleUserLookup(xhr, requestNetID)};
+  //   console.log("requesting: " + GITLAB_ENDPOINT + query);
+  //   xhr.open("GET", GITLAB_ENDPOINT + query, true);
+  //   xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+  //   xhr.setRequestHeader("Content-Type", "text/plain");
+  //   xhr.setRequestHeader("PRIVATE-TOKEN", privateKey);
+  //   // console.log(xhr);
+  //   xhr.send();
+  // }
+  requestNetIDs.forEach(function(el) {
+    var query = "users?search=" + el;
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() { handleSingleUserLookup(xhr, el)};
+    xhr.open("GET", GITLAB_ENDPOINT + query, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhr.setRequestHeader("Content-Type", "text/plain");
+    xhr.setRequestHeader("PRIVATE-TOKEN", privateKey);
+    xhr.send();
+  });
+}
+
+
+
+function handleSingleUserLookup(xhr, user) {
+  console.log(user);
+  console.log(xhr.status);
+  if (xhr.status != 200) {
+    return;
+  }
+  var userData = JSON.parse(xhr.responseText);
+  console.log(userData);
+  // userData is going to be an array of potential matches to a loookup
+  // if it's empty, the user was not found
+  if (userData.length == 0) {
+    appendToNotFoundTable(user);
+  } else {
+    appendToFoundTable(userData);
+  }
+}
+
+function appendToFoundTable(userData) {
+  var foundTable = document.getElementById('found-netids');
+  for (var i = 0; i < userData.length; i++) {
+    foundTable.appendChild(renderJSONTableElement(userData[i]));
+  }
+}
+
+function appendToNotFoundTable(userString) {
+  document.getElementById('not-found-netids')
+          .appendChild(renderStringTableElement(userString));
 }
 
 function handleUsers() {
